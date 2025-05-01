@@ -1,57 +1,3 @@
-/*# Ebay Cart and Checkout
-This Java code creates a simple graphical user interface (GUI) for a marketplace shopping cart and checkout process. It simulates a user adding a single item to a cart and then proceeding to a checkout screen.
-
-## Functionality
-The application consists of two main screens, implemented using a `CardLayout`:
-
-1.  Cart Screen:
-    * Displays the item in the cart (labeled "Example Product Name").
-    * Shows the seller ("Sold by: example\_seller") and the price (₹49.99).
-    * Allows the user to adjust the quantity of the item using "+" and "-" buttons. The quantity defaults to 1.
-    * Dynamically updates the "Subtotal" based on the quantity.
-    * Provides a "Remove" button to set the quantity to 0 and the subtotal to ₹0.00.
-    * Includes a "Save for later" button (functionality not implemented).
-    * Has a "Proceed to Checkout" button that navigates the user to the Checkout screen.
-
-2.  Checkout Screen:
-    * Displays a "Checkout" title.
-    * Shows a summary of the shipping address ("123 Main Street\nCity, State 12345") with an "Edit" button (functionality not implemented).
-    * Shows a summary of the payment method ("Visa ending in 1234") with an "Edit" button (functionality not implemented).
-    * Presents an "Item Total" and an "Order Total", both calculated based on the quantity and price of the item.
-    * Has a "Place Order" button that displays a simple "Order placed successfully!" message using a `JOptionPane`.
-
-## Structure
-
-The code is organized into a single class, `EbayCartCheckout`, which extends `JFrame`. It utilizes various Swing components for creating the UI:
-
-* `JFrame`: The main window of the application.
-* `JPanel`: Used as containers to organize other components.
-* `JLabel`: Displays text information like titles, product details, and prices.
-* `JButton`: Interactive buttons for actions like increasing/decreasing quantity, proceeding to checkout, and placing the order.
-* `BoxLayout`, `BorderLayout`, `GridLayout`, `FlowLayout`: Layout managers to arrange components within the panels.
-* `CardLayout`: Manages the switching between the Cart and Checkout panels.
-* `EmptyBorder`, `LineBorder`, `CompoundBorder`: Used for styling the appearance of panels and components.
-* `Box.createRigidArea()`: Creates invisible components for adding spacing.
-* `JOptionPane`: Used to display a simple message upon placing the order.
-
-## How to Run
-
-1.  Save the code as `EbayCartCheckout.java`.
-2.  Compile the code using a Java compiler: `javac EbayCartCheckout.java`
-3.  Run the compiled class: `java EbayCartCheckout`
-
-This will open the GUI application, allowing you to interact with the simulated shopping cart and checkout process.
-
-## Limitations
-
-* This is a simplified simulation with a single hardcoded item.
-* The "Edit" functionality for shipping address and payment method is not implemented.
-* The "Save for later" functionality is not implemented.
-* There is no actual order processing or data persistence.
-* The UI design is basic and for demonstration purposes.*/
-
-
-//updated and fixed
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
@@ -71,7 +17,6 @@ public class EbayCartCheckout extends JFrame {
 
     private JPanel itemPanel;
     private JPanel savedForLaterPanel;
-    private JButton addToCartButton;
 
     private JLabel addressLabel;
     private JLabel paymentLabel;
@@ -79,7 +24,7 @@ public class EbayCartCheckout extends JFrame {
     public EbayCartCheckout() {
         setTitle("Ebay Cart and Checkout");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(650, 550);
+        setSize(700, 600);
         setLocationRelativeTo(null);
 
         cardLayout = new CardLayout();
@@ -93,20 +38,22 @@ public class EbayCartCheckout extends JFrame {
     }
 
     private JPanel createCartPanel() {
-        JPanel cartPanel = new JPanel(new BorderLayout(10, 10));
+        JPanel cartPanel = new JPanel(new BorderLayout(15, 15));
         cartPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         cartPanel.setBackground(Color.WHITE);
 
         JLabel titleLabel = new JLabel("Shopping Cart");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        titleLabel.setBorder(new EmptyBorder(0, 0, 10, 0));
         cartPanel.add(titleLabel, BorderLayout.NORTH);
 
         itemPanel = new JPanel();
         itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
-        itemPanel.setBorder(new CompoundBorder(new LineBorder(Color.GRAY), new EmptyBorder(10, 10, 10, 10)));
+        itemPanel.setBorder(new CompoundBorder(new LineBorder(Color.GRAY, 1, true), new EmptyBorder(15, 15, 15, 15)));
         itemPanel.setBackground(Color.WHITE);
 
         JLabel nameLabel = new JLabel("Example Product Name");
+        nameLabel.setFont(new Font("Arial", Font.BOLD, 16));
         JLabel sellerLabel = new JLabel("Sold by: example_seller");
         JLabel priceLabel = new JLabel("Price: ₹" + price);
 
@@ -117,7 +64,7 @@ public class EbayCartCheckout extends JFrame {
         JButton minusButton = createButton("-");
         JButton removeButton = createButton("Remove");
         JButton saveButton = createButton("Save for later");
-        JButton checkoutButton = createButton("Proceed to Checkout");
+        JButton checkoutButton = createMainButton("Proceed to Checkout");
 
         plusButton.addActionListener(e -> updateQuantity(quantity + 1));
         minusButton.addActionListener(e -> {
@@ -136,10 +83,10 @@ public class EbayCartCheckout extends JFrame {
 
         checkoutButton.addActionListener(e -> cardLayout.show(mainPanel, "Checkout"));
 
-        JPanel controls = new JPanel();
+        JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        controls.setBackground(Color.WHITE);
         controls.add(minusButton);
         controls.add(plusButton);
-        controls.setBackground(Color.WHITE);
 
         itemPanel.add(nameLabel);
         itemPanel.add(Box.createRigidArea(new Dimension(0, 5)));
@@ -159,14 +106,15 @@ public class EbayCartCheckout extends JFrame {
         // Save for later panel
         savedForLaterPanel = new JPanel();
         savedForLaterPanel.setLayout(new BoxLayout(savedForLaterPanel, BoxLayout.Y_AXIS));
-        savedForLaterPanel.setBorder(new CompoundBorder(new LineBorder(Color.LIGHT_GRAY), new EmptyBorder(10, 10, 10, 10)));
+        savedForLaterPanel.setBorder(new CompoundBorder(new LineBorder(Color.LIGHT_GRAY), new EmptyBorder(15, 15, 15, 15)));
         savedForLaterPanel.setBackground(Color.WHITE);
         savedForLaterPanel.setVisible(false);
 
         JLabel savedLabel = new JLabel("Saved for Later:");
+        savedLabel.setFont(new Font("Arial", Font.BOLD, 16));
         JLabel savedItemLabel = new JLabel("Example Product Name - ₹" + price);
 
-        addToCartButton = createButton("Add to Cart");
+        JButton addToCartButton = createButton("Add to Cart");
         addToCartButton.addActionListener(e -> {
             itemSavedForLater = false;
             quantity = 1;
@@ -183,23 +131,29 @@ public class EbayCartCheckout extends JFrame {
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setBackground(Color.WHITE);
         centerPanel.add(itemPanel);
-        centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         centerPanel.add(savedForLaterPanel);
 
         cartPanel.add(centerPanel, BorderLayout.CENTER);
-        cartPanel.add(checkoutButton, BorderLayout.SOUTH);
+
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomPanel.setBackground(Color.WHITE);
+        bottomPanel.add(checkoutButton);
+        cartPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         return cartPanel;
     }
 
     private JPanel createCheckoutPanel() {
-        JPanel checkoutPanel = new JPanel(new BorderLayout(10, 10));
+        JPanel checkoutPanel = new JPanel(new BorderLayout(15, 15));
         checkoutPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         checkoutPanel.setBackground(Color.WHITE);
 
         JLabel titleLabel = new JLabel("Checkout");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        titleLabel.setBorder(new EmptyBorder(0, 0, 10, 0));
         checkoutPanel.add(titleLabel, BorderLayout.NORTH);
 
         JPanel centerPanel = new JPanel();
@@ -207,49 +161,28 @@ public class EbayCartCheckout extends JFrame {
         centerPanel.setBackground(Color.WHITE);
 
         // Shipping Address Panel
-        JPanel addressPanel = new JPanel(new BorderLayout());
-        addressPanel.setBackground(Color.WHITE);
-        addressLabel = new JLabel("<html><b>Shipping Address:</b><br>123 Main Street<br>City, State 12345</html>");
-        JButton editAddressButton = createButton("Edit");
-        editAddressButton.addActionListener(e -> {
-            String newAddress = JOptionPane.showInputDialog(this, "Enter new shipping address:");
-            if (newAddress != null && !newAddress.trim().isEmpty()) {
-                addressLabel.setText("<html><b>Shipping Address:</b><br>" + newAddress + "</html>");
-            }
-        });
-        addressPanel.add(addressLabel, BorderLayout.CENTER);
-        addressPanel.add(editAddressButton, BorderLayout.EAST);
+        JPanel addressPanel = createInfoPanel("Shipping Address:", "123 Main Street\nCity, State 12345", true);
+        addressLabel = (JLabel) addressPanel.getClientProperty("label");
 
         // Payment Method Panel
-        JPanel paymentPanel = new JPanel(new BorderLayout());
-        paymentPanel.setBackground(Color.WHITE);
-        paymentLabel = new JLabel("<html><b>Payment Method:</b><br>Visa ending in 1234</html>");
-        JButton editPaymentButton = createButton("Edit");
-        editPaymentButton.addActionListener(e -> {
-            String newPayment = JOptionPane.showInputDialog(this, "Enter new payment method:");
-            if (newPayment != null && !newPayment.trim().isEmpty()) {
-                paymentLabel.setText("<html><b>Payment Method:</b><br>" + newPayment + "</html>");
-            }
-        });
-        paymentPanel.add(paymentLabel, BorderLayout.CENTER);
-        paymentPanel.add(editPaymentButton, BorderLayout.EAST);
+        JPanel paymentPanel = createInfoPanel("Payment Method:", "Visa ending in 1234", true);
+        paymentLabel = (JLabel) paymentPanel.getClientProperty("label");
 
         itemTotalLabel = new JLabel("Item Total: ₹" + String.format("%.2f", price * quantity));
         orderTotalLabel = new JLabel("Order Total: ₹" + String.format("%.2f", price * quantity));
 
-        JButton placeOrderButton = createButton("Place Order");
+        JButton placeOrderButton = createMainButton("Place Order");
         placeOrderButton.addActionListener(e -> {
             double total = price * quantity;
             if (total <= 0.0) {
                 JOptionPane.showMessageDialog(this, "Cannot place an order with ₹0.00 total.", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
-                // Order processing - Save the order details to a file
                 saveOrderDetails();
                 JOptionPane.showMessageDialog(this, "Order placed successfully!");
             }
         });
 
-        JButton homeButton = createButton("Home");
+        JButton homeButton = createButton("Back to Cart");
         homeButton.addActionListener(e -> cardLayout.show(mainPanel, "Cart"));
 
         centerPanel.add(addressPanel);
@@ -259,7 +192,7 @@ public class EbayCartCheckout extends JFrame {
         centerPanel.add(itemTotalLabel);
         centerPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         centerPanel.add(orderTotalLabel);
-        centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         centerPanel.add(placeOrderButton);
         centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         centerPanel.add(homeButton);
@@ -269,12 +202,41 @@ public class EbayCartCheckout extends JFrame {
         return checkoutPanel;
     }
 
+    private JPanel createInfoPanel(String title, String value, boolean editable) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
+        JLabel label = new JLabel("<html><b>" + title + "</b><br>" + value.replace("\n", "<br>") + "</html>");
+        JButton editButton = createButton("Edit");
+        if (editable) {
+            editButton.addActionListener(e -> {
+                String newValue = JOptionPane.showInputDialog(this, "Enter new " + title.toLowerCase());
+                if (newValue != null && !newValue.trim().isEmpty()) {
+                    label.setText("<html><b>" + title + "</b><br>" + newValue.replace("\n", "<br>") + "</html>");
+                }
+            });
+        }
+        panel.add(label, BorderLayout.CENTER);
+        panel.add(editButton, BorderLayout.EAST);
+        panel.putClientProperty("label", label);
+        return panel;
+    }
+
     private JButton createButton(String text) {
         JButton button = new JButton(text);
-        button.setBackground(Color.BLUE);
+        button.setBackground(new Color(70, 130, 180));
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
-        button.setPreferredSize(new Dimension(200, 40));
+        button.setPreferredSize(new Dimension(150, 35));
+        return button;
+    }
+
+    private JButton createMainButton(String text) {
+        JButton button = new JButton(text);
+        button.setBackground(new Color(34, 139, 34));
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setFocusPainted(false);
+        button.setPreferredSize(new Dimension(200, 45));
         return button;
     }
 
@@ -287,16 +249,14 @@ public class EbayCartCheckout extends JFrame {
     }
 
     private void saveOrderDetails() {
-        // Prepare the order details to save
         String orderDetails = "Order Date: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "\n";
         orderDetails += "Item: Example Product Name\n";
         orderDetails += "Quantity: " + quantity + "\n";
         orderDetails += "Subtotal: ₹" + String.format("%.2f", price * quantity) + "\n";
-        orderDetails += "Shipping Address: " + addressLabel.getText() + "\n";
-        orderDetails += "Payment Method: " + paymentLabel.getText() + "\n";
+        orderDetails += "Shipping Address: " + addressLabel.getText().replaceAll("<[^>]+>", "").replace("\n", " ") + "\n";
+        orderDetails += "Payment Method: " + paymentLabel.getText().replaceAll("<[^>]+>", "") + "\n";
         orderDetails += "---------------------------------------------\n\n";
 
-        // Write the order details to a file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("orders.txt", true))) {
             writer.write(orderDetails);
         } catch (IOException e) {
